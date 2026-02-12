@@ -34,35 +34,53 @@
       font-weight: 500;
     }
 
+    /* DESKTOP LAYOUT */
     .item {
       display: grid;
-      grid-template-columns: 1fr 110px 80px 120px;
+      grid-template-columns: 1fr 120px 120px;
       align-items: center;
-      padding: 10px 0;
+      padding: 14px 0;
       border-bottom: 1px solid #eee;
       font-size: 15px;
-      gap: 10px;
+      gap: 15px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
     }
 
     .price {
-      text-align: right;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .qty {
+      display: flex;
+      justify-content: flex-end;
     }
 
     .qty input {
-      width: 60px;
-      padding: 4px;
+      width: 90px;
+      padding: 8px;
+      font-size: 16px;
+      text-align: center;
     }
 
     .subtotal {
       text-align: right;
       font-weight: 500;
+      margin-top: 6px;
+      font-size: 14px;
+      color: #444;
     }
 
     .total {
       position: sticky;
       bottom: 0;
       background: white;
-      padding: 15px;
+      padding: 16px;
       border-top: 2px solid #ddd;
       font-size: 20px;
       font-weight: bold;
@@ -77,6 +95,41 @@
       margin-bottom: 20px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.05);
       line-height: 1.5;
+    }
+
+    /* MOBILE LAYOUT */
+    @media (max-width: 640px) {
+      .container {
+        padding: 15px;
+      }
+
+      .item {
+        grid-template-columns: 1fr auto;
+        gap: 10px;
+      }
+
+      .info {
+        gap: 2px;
+      }
+
+      .qty {
+        justify-content: flex-end;
+      }
+
+      .qty input {
+        width: 70px;
+        font-size: 16px;
+      }
+
+      .subtotal {
+        grid-column: 1 / -1;
+        text-align: left;
+      }
+
+      .total {
+        font-size: 18px;
+        text-align: center;
+      }
     }
   </style>
 </head>
@@ -132,12 +185,14 @@
         div.className = "item";
 
         div.innerHTML = `
-          <div>${producto.nombre}</div>
-          <div class="price">$${producto.precio.toLocaleString("es-AR")}</div>
-          <div class="qty">
-            <input type="number" min="0" value="0" data-precio="${producto.precio}" />
+          <div class="info">
+            <div><strong>${producto.nombre}</strong></div>
+            <div class="price">Precio unitario: $${producto.precio.toLocaleString("es-AR")}</div>
+            <div class="subtotal">Subtotal: $0</div>
           </div>
-          <div class="subtotal">$0</div>
+          <div class="qty">
+            <input type="number" min="0" step="1" value="0" data-precio="${producto.precio}" />
+          </div>
         `;
 
         container.appendChild(div);
@@ -154,7 +209,7 @@
         const cantidad = Number(input.value);
 
         const subtotal = precio * cantidad;
-        subtotalDiv.textContent = "$" + subtotal.toLocaleString("es-AR");
+        subtotalDiv.textContent = "Subtotal: $" + subtotal.toLocaleString("es-AR");
 
         total += subtotal;
       });
