@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lavandería | Hualta Hotel</title>
+  <style>
+    body {
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: #faf7f2;
+      margin: 0;
+      color: #333;
+    }
+
+    .header {
+      background: #1f1f1f;
+      color: white;
+      padding: 18px;
+      text-align: center;
+      letter-spacing: 1px;
+      font-size: 18px;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    h2 {
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 6px;
+      margin-top: 30px;
+      font-weight: 500;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 1fr 120px 120px;
+      align-items: center;
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+    }
+
+    .item input {
+      transform: scale(1.2);
+    }
+
+    .price {
+      text-align: right;
+    }
+
+    .total {
+      position: sticky;
+      bottom: 0;
+      background: white;
+      padding: 15px;
+      border-top: 2px solid #ddd;
+      font-size: 20px;
+      font-weight: bold;
+      text-align: right;
+      box-shadow: 0 -2px 8px rgba(0,0,0,0.08);
+    }
+
+    .intro {
+      background: white;
+      padding: 18px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header">SERVICIO DE LAVANDERÍA</div>
+
+  <div class="container">
+
+    <div class="intro">
+      En Hualta Winery Hotel cuidamos cada prenda con atención profesional para que su indumentaria luzca impecable durante toda su estadía.
+    </div>
+
+    <h2>Lavandería</h2>
+    <div id="lavanderia"></div>
+
+    <h2>Limpieza a seco</h2>
+    <div id="seco"></div>
+
+  </div>
+
+  <div class="total">
+    Total: $<span id="total">0</span> ARS
+  </div>
+
+  <script>
+    const lavanderia = [
+      { nombre: "Camisa", precio: 5850 },
+      { nombre: "Camiseta", precio: 3900 },
+      { nombre: "Ropa interior", precio: 2000 },
+      { nombre: "Pantalón", precio: 10100 },
+      { nombre: "Remera", precio: 4500 },
+      { nombre: "Campera", precio: 15200 },
+      { nombre: "Pullover", precio: 8100 },
+      { nombre: "Vestido corto", precio: 17800 }
+    ];
+
+    const seco = [
+      { nombre: "Traje", precio: 24500 },
+      { nombre: "Saco", precio: 20000 },
+      { nombre: "Corbata", precio: 8100 },
+      { nombre: "Blusa de seda", precio: 18000 },
+      { nombre: "Vestido", precio: 24500 }
+    ];
+
+    const totalSpan = document.getElementById("total");
+
+    function crearLista(items, containerId) {
+      const container = document.getElementById(containerId);
+
+      items.forEach(producto => {
+        const div = document.createElement("div");
+        div.className = "item";
+
+        div.innerHTML = `
+          <label>
+            <input type="checkbox" data-precio="${producto.precio}" />
+            ${producto.nombre}
+          </label>
+          <div class="price">$${producto.precio.toLocaleString("es-AR")}</div>
+          <div></div>
+        `;
+
+        container.appendChild(div);
+      });
+    }
+
+    function actualizarTotal() {
+      let total = 0;
+      document.querySelectorAll("input[type='checkbox']").forEach(cb => {
+        if (cb.checked) total += Number(cb.dataset.precio);
+      });
+      totalSpan.textContent = total.toLocaleString("es-AR");
+    }
+
+    crearLista(lavanderia, "lavanderia");
+    crearLista(seco, "seco");
+
+    document.addEventListener("change", actualizarTotal);
+  </script>
+
+</body>
+</html>
