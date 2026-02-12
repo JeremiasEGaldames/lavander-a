@@ -36,19 +36,26 @@
 
     .item {
       display: grid;
-      grid-template-columns: 1fr 120px 120px;
+      grid-template-columns: 1fr 110px 80px 120px;
       align-items: center;
       padding: 10px 0;
       border-bottom: 1px solid #eee;
       font-size: 15px;
-    }
-
-    .item input {
-      transform: scale(1.2);
+      gap: 10px;
     }
 
     .price {
       text-align: right;
+    }
+
+    .qty input {
+      width: 60px;
+      padding: 4px;
+    }
+
+    .subtotal {
+      text-align: right;
+      font-weight: 500;
     }
 
     .total {
@@ -125,12 +132,12 @@
         div.className = "item";
 
         div.innerHTML = `
-          <label>
-            <input type="checkbox" data-precio="${producto.precio}" />
-            ${producto.nombre}
-          </label>
+          <div>${producto.nombre}</div>
           <div class="price">$${producto.precio.toLocaleString("es-AR")}</div>
-          <div></div>
+          <div class="qty">
+            <input type="number" min="0" value="0" data-precio="${producto.precio}" />
+          </div>
+          <div class="subtotal">$0</div>
         `;
 
         container.appendChild(div);
@@ -139,16 +146,26 @@
 
     function actualizarTotal() {
       let total = 0;
-      document.querySelectorAll("input[type='checkbox']").forEach(cb => {
-        if (cb.checked) total += Number(cb.dataset.precio);
+
+      document.querySelectorAll(".item").forEach(row => {
+        const input = row.querySelector("input");
+        const subtotalDiv = row.querySelector(".subtotal");
+        const precio = Number(input.dataset.precio);
+        const cantidad = Number(input.value);
+
+        const subtotal = precio * cantidad;
+        subtotalDiv.textContent = "$" + subtotal.toLocaleString("es-AR");
+
+        total += subtotal;
       });
+
       totalSpan.textContent = total.toLocaleString("es-AR");
     }
 
     crearLista(lavanderia, "lavanderia");
     crearLista(seco, "seco");
 
-    document.addEventListener("change", actualizarTotal);
+    document.addEventListener("input", actualizarTotal);
   </script>
 
 </body>
